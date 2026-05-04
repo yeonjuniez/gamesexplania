@@ -1,0 +1,1051 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Ular Pintar - Teks Eksplanasi</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Fredoka:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;font-family:'Fredoka',sans-serif}
+
+:root{
+  --sky1:#ffd6e7;--sky2:#ffecb3;--sky3:#c8e6c9;
+  --green1:#43a047;--green2:#2e7d32;--green3:#1b5e20;
+  --brown:#6d4c41;--yellow:#ffd54f;--red:#e53935;
+}
+
+body{
+  background: linear-gradient(180deg, #87CEEB 0%, #b3e5fc 30%, #c8e6c9 70%, #a5d6a7 100%);
+  min-height:100vh;
+}
+
+/* ===== ANIMATED SKY BACKGROUND ===== */
+.bg-scene{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background: linear-gradient(180deg,
+    #1a6fa8 0%,
+    #2e8fd4 10%,
+    #4da6e8 22%,
+    #72c0f5 38%,
+    #a8d8f5 52%,
+    #c5e8fa 62%,
+    #d8f0f5 72%,
+    #e8f5e0 82%,
+    #d4eda8 91%,
+    #b8de82 100%
+  );
+  z-index:-20;
+}
+/* Atmospheric haze layer */
+.bg-scene::after{
+  content:'';position:absolute;bottom:0;left:0;width:100%;height:45%;
+  background:linear-gradient(180deg,
+    transparent 0%,
+    rgba(255,255,240,0.08) 40%,
+    rgba(220,240,200,0.18) 70%,
+    rgba(180,220,160,0.28) 100%
+  );
+}
+
+/* Rainbow arc - anchored to bottom so it sits on the ground */
+.rainbow{
+  position:fixed;
+  bottom:55px; /* aligns with hills/ground */
+  left:50%;transform:translateX(-50%);
+  width:700px;height:360px;
+  z-index:-18;opacity:0.38;pointer-events:none;
+  overflow:hidden;
+}
+.rainbow-arc{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  border-radius:50% 50% 0 0;border:13px solid transparent;
+}
+.rainbow-arc:nth-child(1){width:680px;height:340px;border-color:#ff0000 transparent transparent transparent}
+.rainbow-arc:nth-child(2){width:654px;height:327px;border-color:#ff7700 transparent transparent transparent}
+.rainbow-arc:nth-child(3){width:628px;height:314px;border-color:#ffff00 transparent transparent transparent}
+.rainbow-arc:nth-child(4){width:602px;height:301px;border-color:#00cc00 transparent transparent transparent}
+.rainbow-arc:nth-child(5){width:576px;height:288px;border-color:#0000ff transparent transparent transparent}
+.rainbow-arc:nth-child(6){width:550px;height:275px;border-color:#8b00ff transparent transparent transparent}
+
+/* SUN */
+.sun{
+  position:fixed;top:20px;right:60px;width:80px;height:80px;z-index:-17;pointer-events:none;
+}
+.sun-body{
+  width:80px;height:80px;background:radial-gradient(circle,#fff176,#ffd54f);
+  border-radius:50%;
+  box-shadow:0 0 0 15px rgba(255,213,79,0.2),0 0 0 30px rgba(255,213,79,0.1),0 0 60px rgba(255,213,79,0.5);
+  animation:sunPulse 3s ease-in-out infinite;
+}
+@keyframes sunPulse{0%,100%{box-shadow:0 0 0 15px rgba(255,213,79,0.2),0 0 0 30px rgba(255,213,79,0.1),0 0 60px rgba(255,213,79,0.5)}50%{box-shadow:0 0 0 20px rgba(255,213,79,0.25),0 0 0 40px rgba(255,213,79,0.12),0 0 80px rgba(255,213,79,0.6)}}
+.sun-ray{position:absolute;top:50%;left:50%;width:100px;height:4px;background:linear-gradient(90deg,transparent,rgba(255,213,79,0.6),transparent);border-radius:2px;transform-origin:0 50%;margin-top:-2px;margin-left:-10px;animation:spinRays 8s linear infinite}
+@keyframes spinRays{to{transform:rotate(360deg)}}
+
+/* CLOUDS */
+.clouds{position:fixed;top:0;left:0;width:100%;height:55%;z-index:-16;pointer-events:none;overflow:hidden}
+.cloud{position:absolute;animation:floatCloud linear infinite}
+.cloud-body{position:relative}
+.cloud-part{position:absolute;background:rgba(255,255,255,0.92);border-radius:50%}
+.c1{width:180px;top:5%;animation-duration:35s;animation-delay:-5s}
+.c2{width:140px;top:18%;animation-duration:28s;animation-delay:-12s}
+.c3{width:160px;top:8%;animation-duration:40s;animation-delay:-20s}
+.c4{width:120px;top:25%;animation-duration:32s;animation-delay:-8s}
+.c5{width:100px;top:3%;animation-duration:45s;animation-delay:-30s}
+
+@keyframes floatCloud{
+  0%{left:-220px;opacity:0}
+  5%{opacity:1}
+  95%{opacity:1}
+  100%{left:110%;opacity:0}
+}
+
+/* BIRDS */
+.birds{position:fixed;top:8%;left:0;width:100%;z-index:-15;pointer-events:none;animation:flyBirds 20s linear infinite}
+@keyframes flyBirds{from{transform:translateX(-100px)}to{transform:translateX(110vw)}}
+.bird{display:inline-block;font-size:1.2rem;animation:birdFlap 0.5s ease-in-out infinite alternate}
+@keyframes birdFlap{from{transform:translateY(0)}to{transform:translateY(-8px)}}
+.bird:nth-child(2){animation-delay:.15s;margin-left:20px}
+.bird:nth-child(3){animation-delay:.3s;margin-left:15px;font-size:0.9rem}
+
+/* HILLS - layered for depth/parallax feel */
+.hills{position:fixed;bottom:60px;left:0;width:100%;z-index:-14;pointer-events:none}
+.hill{
+  position:absolute;bottom:0;border-radius:50% 50% 0 0;
+}
+/* Far hills (lighter, more blue-green = atmospheric perspective) */
+.hill-far1{width:600px;height:140px;background:linear-gradient(180deg,#b0cfa0,#8aba78);left:-80px;opacity:0.55;z-index:-16;bottom:0;border-radius:50% 50% 0 0;position:absolute;}
+.hill-far2{width:500px;height:120px;background:linear-gradient(180deg,#a8c898,#84b464);right:-60px;opacity:0.5;z-index:-16;bottom:0;border-radius:50% 50% 0 0;position:absolute;}
+/* Mid hills */
+.hill1{width:520px;height:210px;background:linear-gradient(180deg,#76b947 0%,#5a9c2e 50%,#3d7520 100%);left:-60px;box-shadow:inset 0 -8px 20px rgba(0,0,0,0.1)}
+.hill2{width:420px;height:170px;background:linear-gradient(180deg,#8ec94a 0%,#6bae30 45%,#4a8a18 100%);left:28%;box-shadow:inset 0 -6px 16px rgba(0,0,0,0.08)}
+.hill3{width:560px;height:190px;background:linear-gradient(180deg,#7dc442 0%,#5faa26 50%,#3f8510 100%);right:-90px;box-shadow:inset 0 -7px 18px rgba(0,0,0,0.09)}
+
+/* TREES */
+.trees{position:fixed;bottom:55px;left:0;width:100%;z-index:-13;pointer-events:none}
+.tree{position:absolute;bottom:0;display:flex;flex-direction:column;align-items:center}
+.tree-crown{
+  background:radial-gradient(ellipse at 40% 35%,#6cc94a,#3a8c20 60%,#1f5c0a);
+  border-radius:50% 50% 40% 40%;
+  box-shadow:inset -4px -6px 12px rgba(0,0,0,0.18),inset 3px 4px 8px rgba(255,255,255,0.08);
+}
+.tree-trunk{background:linear-gradient(90deg,#a07850 0%,#7a5530 40%,#5a3d1a 100%);border-radius:3px;box-shadow:inset -2px 0 4px rgba(0,0,0,0.2)}
+
+/* FLOWERS GROUND */
+.ground-flowers{position:fixed;bottom:0;left:0;width:100%;height:65px;z-index:-12;pointer-events:none;overflow:hidden}
+.ground-flowers svg{width:100%;height:100%}
+
+/* GRASS GROUND */
+.ground{
+  position:fixed;bottom:0;left:0;width:100%;height:72px;z-index:-11;
+  background:linear-gradient(180deg,#5ab040 0%,#3d8c24 25%,#2d6b18 55%,#6b4423 70%,#5a3618 100%);
+  pointer-events:none;
+  box-shadow:0 -4px 12px rgba(0,0,0,0.2);
+}
+.ground::before{
+  content:'';position:absolute;top:-22px;left:0;width:200%;height:28px;
+  background:radial-gradient(ellipse 32px 22px at 50% 100%,#6ec44e 49%,transparent 50%) repeat-x;
+  background-size:62px 28px;
+  animation:waveGrass 4s linear infinite;
+}
+/* Soil/dirt stripe */
+.ground::after{
+  content:'';position:absolute;bottom:0;left:0;width:100%;height:28px;
+  background:linear-gradient(180deg,#7a4f2a 0%,#5c3515 60%,#4a2a0e 100%);
+  opacity:0.9;
+}
+@keyframes waveGrass{from{transform:translateX(0)}to{transform:translateX(-60px)}}
+
+/* BUTTERFLIES */
+.butterfly{position:fixed;z-index:-10;pointer-events:none;font-size:1.4rem;animation:butterflyFly 8s ease-in-out infinite}
+.bf1{left:10%;bottom:25%;animation-delay:0s}
+.bf2{left:70%;bottom:35%;animation-delay:3s;font-size:1rem}
+.bf3{left:45%;bottom:20%;animation-delay:5s;font-size:1.2rem}
+@keyframes butterflyFly{
+  0%{transform:translate(0,0) rotate(0deg)}
+  25%{transform:translate(30px,-20px) rotate(5deg)}
+  50%{transform:translate(-15px,-40px) rotate(-5deg)}
+  75%{transform:translate(20px,-10px) rotate(3deg)}
+  100%{transform:translate(0,0) rotate(0deg)}
+}
+
+/* CHILDREN CHARACTERS */
+
+
+50%{transform:translateY(-5px)}}
+30%{transform:rotate(25deg)}60%{transform:rotate(-10deg)}}
+40%{transform:translateY(-14px)}60%{transform:translateY(-8px)}}
+50%{transform:rotate(4deg)}}
+25%{transform:translateY(-10px) rotate(-3deg)}75%{transform:translateY(-6px) rotate(3deg)}}
+
+/* GUIDE SCREEN */
+.guide-screen{background:rgba(0,0,0,0.45);backdrop-filter:blur(5px)}
+.guide-card{
+  background:rgba(255,255,255,0.97);border-radius:28px;
+  padding:24px 22px;max-width:390px;width:92%;
+  box-shadow:0 20px 60px rgba(46,125,50,0.35),0 0 0 3px rgba(255,213,79,0.6);
+  animation:cardBounce 0.5s cubic-bezier(.36,.07,.19,.97);
+  max-height:88vh;overflow-y:auto;
+}
+.guide-title{
+  font-family:'Fredoka One',cursive;font-size:1.85rem;
+  background:linear-gradient(135deg,#2e7d32,#66bb6a);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-align:center;margin-bottom:3px;
+}
+.guide-subtitle{text-align:center;color:#888;font-size:0.87rem;margin-bottom:14px}
+.guide-section{
+  background:linear-gradient(135deg,#f1f8e9,#e8f5e9);
+  border-radius:16px;padding:13px 15px;margin-bottom:11px;
+  border-left:5px solid #66bb6a;
+}
+.guide-section h3{
+  font-family:'Fredoka One',cursive;font-size:1.02rem;color:#2e7d32;
+  margin-bottom:8px;display:flex;align-items:center;gap:6px;
+}
+.guide-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:6px}
+.guide-icon{font-size:1.25rem;flex-shrink:0;margin-top:1px}
+.guide-text{font-size:0.87rem;color:#444;line-height:1.45}
+.guide-text strong{color:#2e7d32}
+.score-table{width:100%;border-collapse:collapse;font-size:0.84rem}
+.score-table td{padding:5px 8px;border-radius:6px}
+.score-table tr:nth-child(odd) td{background:rgba(102,187,106,0.12)}
+.score-table td:first-child{font-weight:600;color:#2e7d32}
+.ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:5px}
+.ctrl-item{
+  background:rgba(255,255,255,0.8);border-radius:10px;padding:6px 9px;
+  display:flex;align-items:center;gap:6px;font-size:0.82rem;color:#555;
+  border:1px solid rgba(102,187,106,0.3);
+}
+.ctrl-key{
+  background:linear-gradient(135deg,#66bb6a,#43a047);color:#fff;
+  border-radius:7px;padding:2px 8px;font-size:0.79rem;font-weight:700;
+  box-shadow:0 2px 0 #2e7d32;white-space:nowrap;
+}
+.btn-guide-start{
+  background:linear-gradient(135deg,#ffd54f,#ff8f00);color:#fff;
+  border:none;padding:15px 0;font-size:1.2rem;width:100%;
+  font-family:'Fredoka One',cursive;border-radius:50px;cursor:pointer;
+  box-shadow:0 8px 25px rgba(255,143,0,0.4),0 3px 0 #e65100;
+  transition:all 0.15s;letter-spacing:0.5px;margin-top:6px;
+}
+.btn-guide-start:hover{transform:translateY(-2px)}
+.btn-guide-start:active{transform:translateY(2px)}
+
+/* ===== APP LAYOUT ===== */
+.app{
+  width:100%;height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:flex-start;
+  position:relative;overflow:hidden;padding:6px;
+}
+
+/* ===== SCREENS ===== */
+.screen{display:none;flex-direction:column;align-items:center;justify-content:center;
+  position:absolute;inset:0;z-index:10}
+.screen.active{display:flex}
+
+/* START SCREEN */
+.start-card{
+  background:rgba(255,255,255,0.95);border-radius:28px;
+  padding:30px 26px;text-align:center;max-width:370px;width:90%;
+  box-shadow:0 20px 60px rgba(46,125,50,0.3),0 0 0 3px rgba(255,213,79,0.5);
+  backdrop-filter:blur(10px);
+  animation:cardBounce 0.6s cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes cardBounce{0%{transform:scale(0.8) translateY(30px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
+
+.start-card .title{
+  font-family:'Fredoka One',cursive;font-size:2.6rem;color:var(--green2);
+  text-shadow:2px 3px 0 rgba(46,125,50,0.2);
+  background:linear-gradient(135deg,#2e7d32,#66bb6a);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.start-card .subtitle{font-size:1rem;color:#666;margin:4px 0 18px}
+.emoji-row{font-size:2.5rem;margin:6px 0;animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.btn-play{
+  background:linear-gradient(135deg,#66bb6a,#2e7d32);color:#fff;
+  border:none;padding:16px 50px;font-size:1.25rem;
+  font-family:'Fredoka One',cursive;border-radius:50px;cursor:pointer;
+  box-shadow:0 8px 25px rgba(46,125,50,0.4),0 3px 0 #1b5e20;
+  transition:all 0.15s;letter-spacing:0.5px;
+}
+.btn-play:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(46,125,50,0.5),0 5px 0 #1b5e20}
+.btn-play:active{transform:translateY(2px);box-shadow:0 4px 15px rgba(46,125,50,0.4),0 1px 0 #1b5e20}
+.badge{
+  display:inline-block;background:linear-gradient(135deg,#fff3e0,#ffe0b2);
+  color:#e65100;padding:5px 16px;border-radius:20px;font-size:0.82rem;
+  font-weight:500;margin-top:14px;border:1px solid rgba(230,81,0,0.2);
+}
+.start-tips{font-size:0.8rem;color:#999;margin-top:10px;line-height:1.5}
+
+/* GAME SCREEN */
+.game-screen-inner{
+  display:none;flex-direction:column;align-items:center;
+  gap:5px;padding:6px;width:100%;position:absolute;inset:0;z-index:10;
+}
+.game-screen-inner.active{display:flex}
+
+.top-bar{
+  display:flex;justify-content:space-between;width:100%;max-width:420px;
+  gap:8px;margin-top:4px;
+}
+.stat-pill{
+  background:rgba(255,255,255,0.9);border-radius:30px;
+  padding:7px 16px;font-weight:600;font-size:0.9rem;color:var(--green2);
+  display:flex;align-items:center;gap:5px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1),0 0 0 2px rgba(255,213,79,0.4);
+  backdrop-filter:blur(8px);flex:1;justify-content:center;
+}
+
+canvas{
+  border-radius:18px;
+  border:6px solid var(--brown);
+  box-shadow:
+    0 0 0 3px #a1887f,
+    0 12px 40px rgba(0,0,0,0.3),
+    inset 0 0 30px rgba(0,0,0,0.05);
+  max-width:100%;touch-action:none;
+}
+
+.dpad{
+  display:grid;
+  grid-template-areas:"_ u _" "l _ r" "_ d _";
+  grid-template-columns:repeat(3,58px);
+  grid-template-rows:repeat(3,50px);
+  gap:4px;margin-top:4px;
+}
+.dpad button{
+  border:none;border-radius:14px;font-size:1.4rem;color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.1s;-webkit-tap-highlight-color:transparent;user-select:none;
+  box-shadow:0 4px 0 rgba(0,0,0,0.2);
+}
+.dpad button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,0.2)}
+.d-up{grid-area:u;background:linear-gradient(180deg,#66bb6a,#43a047)}
+.d-down{grid-area:d;background:linear-gradient(0deg,#66bb6a,#43a047)}
+.d-left{grid-area:l;background:linear-gradient(90deg,#66bb6a,#43a047)}
+.d-right{grid-area:r;background:linear-gradient(270deg,#66bb6a,#43a047)}
+
+/* MODAL */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.55);z-index:100;
+  align-items:center;justify-content:center;padding:12px;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.active{display:flex}
+.modal{
+  background:#fff;border-radius:24px;padding:22px 18px;
+  max-width:440px;width:100%;max-height:90vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  animation:popIn 0.25s cubic-bezier(.36,.07,.19,.97);
+  border:3px solid rgba(255,213,79,0.4);
+}
+@keyframes popIn{from{transform:scale(0.8);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header{
+  background:linear-gradient(135deg,#e8f5e9,#f1f8e9);
+  border-radius:16px;padding:12px 14px;margin-bottom:14px;
+  border-left:5px solid #4caf50;
+}
+.modal-header h2{font-family:'Fredoka One',cursive;font-size:1.15rem;color:#2e7d32;line-height:1.4}
+.passage{
+  background:linear-gradient(135deg,#fff8e1,#fff3e0);
+  border-left:5px solid #ffd54f;border-radius:10px;
+  padding:10px 12px;font-size:0.88rem;color:#555;
+  margin-bottom:12px;line-height:1.55;font-style:italic;
+}
+
+.option-btn{
+  display:block;width:100%;text-align:left;
+  background:linear-gradient(135deg,#fafafa,#f5f5f5);
+  border:2px solid #e0e0e0;border-radius:14px;
+  padding:11px 15px;font-size:0.95rem;font-family:'Fredoka',sans-serif;
+  margin-bottom:8px;cursor:pointer;transition:all 0.15s;color:#333;
+  font-weight:500;
+}
+.option-btn:hover{background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border-color:#4caf50;transform:translateX(3px)}
+.option-btn.correct{
+  background:linear-gradient(135deg,#c8e6c9,#a5d6a7);
+  border-color:#2e7d32;color:#1b5e20;
+  box-shadow:0 4px 12px rgba(46,125,50,0.3);
+}
+.option-btn.wrong{
+  background:linear-gradient(135deg,#ffcdd2,#ef9a9a);
+  border-color:#c62828;color:#b71c1c;
+  animation:shake 0.4s ease;
+}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.modal-feedback{
+  text-align:center;font-size:1.05rem;font-weight:600;
+  margin-top:8px;min-height:26px;padding:6px;border-radius:10px;
+}
+
+/* GAME OVER */
+.gameover-screen{background:rgba(0,0,0,0.65);backdrop-filter:blur(6px)}
+.go-card{
+  background:#fff;border-radius:28px;padding:32px 28px;
+  text-align:center;max-width:340px;width:90%;
+  animation:popIn 0.35s cubic-bezier(.36,.07,.19,.97);
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  border:3px solid rgba(255,213,79,0.5);
+}
+.go-card h2{font-family:'Fredoka One',cursive;font-size:2rem;color:#e53935;margin-bottom:4px}
+.go-score{
+  font-family:'Fredoka One',cursive;font-size:3.5rem;
+  background:linear-gradient(135deg,#ffd54f,#ff8f00);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin:12px 0;
+}
+.go-card .go-msg{color:#777;font-size:0.95rem;margin-bottom:20px}
+.btn-retry{
+  background:linear-gradient(135deg,#66bb6a,#2e7d32);color:#fff;
+  border:none;padding:14px 44px;font-size:1.15rem;
+  font-family:'Fredoka One',cursive;border-radius:50px;cursor:pointer;
+  box-shadow:0 8px 20px rgba(46,125,50,0.4),0 3px 0 #1b5e20;
+  transition:all 0.15s;
+}
+.btn-retry:hover{transform:translateY(-2px)}
+.btn-retry:active{transform:translateY(2px)}
+
+/* CONFETTI */
+.confetti-box{position:fixed;inset:0;pointer-events:none;z-index:200}
+.cp{position:absolute;width:10px;height:10px;border-radius:2px;animation:cpFall 1.2s ease-out forwards}
+@keyframes cpFall{0%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}100%{opacity:0;transform:translateY(220px) rotate(720deg) scale(0.5)}}
+
+.success-pop{
+  position:fixed;left:50%;top:38%;transform:translateX(-50%);
+  font-family:'Fredoka One',cursive;font-size:2.2rem;color:#fff;
+  text-shadow:0 3px 10px rgba(0,0,0,0.4);pointer-events:none;
+  animation:successPop 0.9s ease forwards;z-index:201;
+}
+@keyframes successPop{0%{opacity:1;transform:translateX(-50%) scale(0.5) translateY(0)}60%{opacity:1;transform:translateX(-50%) scale(1.2) translateY(-20px)}100%{opacity:0;transform:translateX(-50%) scale(1) translateY(-50px)}}
+
+@media(max-height:620px){
+  .dpad{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(3,42px);gap:3px}
+  .dpad button{font-size:1.1rem}
+}
+@media(min-width:600px){
+  .dpad{grid-template-columns:repeat(3,66px);grid-template-rows:repeat(3,56px)}
+}
+</style>
+</head>
+<body>
+
+<!-- BG SCENE -->
+<div class="bg-scene"></div>
+
+<div class="rainbow">
+  <div class="rainbow-arc"></div><div class="rainbow-arc"></div><div class="rainbow-arc"></div>
+  <div class="rainbow-arc"></div><div class="rainbow-arc"></div><div class="rainbow-arc"></div>
+</div>
+
+<div class="sun"><div class="sun-body"></div><div class="sun-ray"></div></div>
+
+<div class="clouds">
+  <!-- Cloud 1 -->
+  <div class="cloud c1" style="left:-180px">
+    <div class="cloud-body" style="width:180px;height:70px">
+      <div class="cloud-part" style="width:70px;height:70px;left:0;top:15px"></div>
+      <div class="cloud-part" style="width:90px;height:80px;left:45px;top:5px"></div>
+      <div class="cloud-part" style="width:65px;height:65px;left:110px;top:18px"></div>
+      <div class="cloud-part" style="width:180px;height:40px;left:0;bottom:0;border-radius:10px"></div>
+    </div>
+  </div>
+  <!-- Cloud 2 -->
+  <div class="cloud c2" style="left:25%">
+    <div class="cloud-body" style="width:140px;height:55px">
+      <div class="cloud-part" style="width:55px;height:55px;left:0;top:12px"></div>
+      <div class="cloud-part" style="width:70px;height:62px;left:35px;top:4px"></div>
+      <div class="cloud-part" style="width:50px;height:50px;left:90px;top:14px"></div>
+      <div class="cloud-part" style="width:140px;height:30px;left:0;bottom:0;border-radius:8px"></div>
+    </div>
+  </div>
+  <!-- Cloud 3 -->
+  <div class="cloud c3" style="left:55%">
+    <div class="cloud-body" style="width:160px;height:64px">
+      <div class="cloud-part" style="width:62px;height:62px;left:0;top:13px"></div>
+      <div class="cloud-part" style="width:80px;height:72px;left:40px;top:3px"></div>
+      <div class="cloud-part" style="width:58px;height:58px;left:100px;top:16px"></div>
+      <div class="cloud-part" style="width:160px;height:35px;left:0;bottom:0;border-radius:9px"></div>
+    </div>
+  </div>
+  <!-- Cloud 4 -->
+  <div class="cloud c4" style="left:80%">
+    <div class="cloud-body" style="width:120px;height:48px">
+      <div class="cloud-part" style="width:46px;height:46px;left:0;top:10px"></div>
+      <div class="cloud-part" style="width:60px;height:54px;left:30px;top:3px"></div>
+      <div class="cloud-part" style="width:44px;height:44px;left:75px;top:12px"></div>
+      <div class="cloud-part" style="width:120px;height:26px;left:0;bottom:0;border-radius:7px"></div>
+    </div>
+  </div>
+  <!-- Cloud 5 -->
+  <div class="cloud c5" style="left:40%">
+    <div class="cloud-body" style="width:100px;height:42px">
+      <div class="cloud-part" style="width:40px;height:40px;left:0;top:8px"></div>
+      <div class="cloud-part" style="width:52px;height:48px;left:25px;top:2px"></div>
+      <div class="cloud-part" style="width:38px;height:38px;left:62px;top:10px"></div>
+      <div class="cloud-part" style="width:100px;height:22px;left:0;bottom:0;border-radius:6px"></div>
+    </div>
+  </div>
+</div>
+
+<div class="birds">
+  <span class="bird">🐦</span><span class="bird">🐦</span><span class="bird">🐦</span>
+</div>
+
+<div class="hills">
+  <div class="hill-far1"></div>
+  <div class="hill-far2"></div>
+  <div class="hill hill1"></div>
+  <div class="hill hill2"></div>
+  <div class="hill hill3"></div>
+</div>
+
+<div class="trees">
+  <div class="tree" style="left:3%">
+    <div class="tree-crown" style="width:60px;height:80px"></div>
+    <div class="tree-trunk" style="width:12px;height:30px"></div>
+  </div>
+  <div class="tree" style="left:8%">
+    <div class="tree-crown" style="width:45px;height:60px;background:radial-gradient(ellipse,#66bb6a,#388e3c)"></div>
+    <div class="tree-trunk" style="width:9px;height:22px"></div>
+  </div>
+  <div class="tree" style="right:5%">
+    <div class="tree-crown" style="width:65px;height:85px"></div>
+    <div class="tree-trunk" style="width:13px;height:32px"></div>
+  </div>
+  <div class="tree" style="right:12%">
+    <div class="tree-crown" style="width:50px;height:65px;background:radial-gradient(ellipse,#a5d6a7,#2e7d32)"></div>
+    <div class="tree-trunk" style="width:10px;height:25px"></div>
+  </div>
+</div>
+
+<div class="ground"></div>
+
+<!-- CHILDREN CHARACTERS SVG -->
+
+
+<div class="butterfly bf1">🦋</div>
+<div class="butterfly bf2">🦋</div>
+<div class="butterfly bf3">🦋</div>
+
+<!-- ===== APP ===== -->
+<div class="app" id="app">
+
+  <!-- START SCREEN -->
+  <div class="screen active" id="startScreen">
+    <div class="start-card">
+      <div class="emoji-row">🐍📚✨</div>
+      <div class="title">Ular Pintar</div>
+      <div class="subtitle">Belajar Teks Eksplanasi Kelas 6</div>
+      <button class="btn-play" id="btnStart">📖 Lihat Panduan</button>
+      <div class="badge">Kelas 6 SD · Bahasa Indonesia</div>
+      <div class="start-tips">⭐ Jawab benar langsung: +10 poin<br>✅ Jawab benar percobaan ke-2: +9 poin</div>
+    </div>
+  </div>
+
+  <!-- GUIDE SCREEN -->
+  <div class="screen guide-screen" id="guideScreen">
+    <div class="guide-card">
+      <div class="guide-title">📖 Cara Bermain</div>
+      <div class="guide-subtitle">Ular Pintar · Teks Eksplanasi Kelas 6</div>
+
+      <div class="guide-section">
+        <h3>🎯 Tujuan Permainan</h3>
+        <div class="guide-row">
+          <span class="guide-icon">🐍</span>
+          <div class="guide-text">Gerakkan ular untuk memakan <strong>apel merah</strong> sebanyak mungkin. Setiap kali memakan apel, kamu akan mendapat <strong>soal bahasa Indonesia</strong> tentang teks eksplanasi.</div>
+        </div>
+        <div class="guide-row">
+          <span class="guide-icon">✅</span>
+          <div class="guide-text">Jawab soal dengan benar untuk membuat ularmu <strong>semakin panjang</strong> dan mendapatkan poin!</div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>🕹️ Cara Menggerakkan Ular</h3>
+        <div class="ctrl-grid">
+          <div class="ctrl-item"><span class="ctrl-key">▲</span> Gerak ke atas</div>
+          <div class="ctrl-item"><span class="ctrl-key">▼</span> Gerak ke bawah</div>
+          <div class="ctrl-item"><span class="ctrl-key">◀</span> Gerak ke kiri</div>
+          <div class="ctrl-item"><span class="ctrl-key">▶</span> Gerak ke kanan</div>
+        </div>
+        <div class="guide-row" style="margin-top:9px">
+          <span class="guide-icon">📱</span>
+          <div class="guide-text">Di HP: <strong>geser layar</strong> ke arah yang diinginkan, atau tekan tombol arah di bawah kanvas.</div>
+        </div>
+        <div class="guide-row">
+          <span class="guide-icon">⌨️</span>
+          <div class="guide-text">Di komputer: tekan <strong>tombol panah</strong> pada keyboard.</div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>⭐ Sistem Poin</h3>
+        <table class="score-table">
+          <tr><td>Jawab benar percobaan ke-1</td><td>+10 poin 🏆</td></tr>
+          <tr><td>Jawab benar percobaan ke-2</td><td>+9 poin 🥈</td></tr>
+          <tr><td>Jawab benar percobaan ke-3</td><td>+7 poin 🥉</td></tr>
+          <tr><td>Jawab benar selanjutnya</td><td>+5 poin ✅</td></tr>
+        </table>
+      </div>
+
+      <div class="guide-section">
+        <h3>⚠️ Perhatian</h3>
+        <div class="guide-row">
+          <span class="guide-icon">💀</span>
+          <div class="guide-text">Jangan sampai ular <strong>menabrak badannya sendiri</strong> — permainan akan berakhir!</div>
+        </div>
+        <div class="guide-row">
+          <span class="guide-icon">❌</span>
+          <div class="guide-text">Jawaban salah: ular akan <strong>sedikit memendek</strong>. Coba lagi sampai benar!</div>
+        </div>
+        <div class="guide-row">
+          <span class="guide-icon">🔄</span>
+          <div class="guide-text">Ular bisa <strong>menembus dinding</strong> dan keluar dari sisi lain — manfaatkan ini!</div>
+        </div>
+      </div>
+
+      <button class="btn-guide-start" id="btnGuideStart">🎮 Mulai Bermain!</button>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div class="game-screen-inner" id="gameScreen">
+    <div class="top-bar">
+      <div class="stat-pill">⭐ Skor: <span id="scoreEl">0</span></div>
+      <div class="stat-pill">🐍 Panjang: <span id="lenEl">3</span></div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <div class="dpad">
+      <button class="d-up" id="btnUp">▲</button>
+      <button class="d-left" id="btnLeft">◀</button>
+      <button class="d-right" id="btnRight">▶</button>
+      <button class="d-down" id="btnDown">▼</button>
+    </div>
+  </div>
+
+  <!-- QUESTION MODAL -->
+  <div class="modal-overlay" id="questionModal">
+    <div class="modal">
+      <div class="modal-header"><h2 id="qText"></h2></div>
+      <div id="qPassage" class="passage" style="display:none"></div>
+      <div id="qOptions"></div>
+      <div class="modal-feedback" id="qFeedback"></div>
+    </div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div class="screen gameover-screen" id="gameoverScreen">
+    <div class="go-card">
+      <h2>💥 Game Over!</h2>
+      <div class="go-score" id="goScore">0</div>
+      <div class="go-msg">Keren! Terus semangat belajar ya! 🌟</div>
+      <button class="btn-retry" id="btnRetry">🔄 Main Lagi</button>
+    </div>
+  </div>
+
+  <div class="confetti-box" id="confettiBox"></div>
+</div>
+
+<script>
+const questions = [
+  {p:"Akhir-akhir ini, istilah gempa bumi sering dibicarakan oleh banyak orang. Sepanjang abad 20 dan 21, gempa telah mengakibatkan banyak kematian dan kerugian material yang sangat besar. Oleh karena itu, dapat dikatakan bahwa tak pernah ada peristiwa alam lain dalam sejarah yang berpengaruh langsung pada manusia, selain gempa bumi.",q:"Kata penunjuk waktu pada teks eksplanasi di atas adalah ...",o:["Oleh karena itu","Akhir-akhir ini","Mengakibatkan","Peristiwa"],a:1},
+  {q:"Urutan struktur teks eksplanasi yang tepat adalah ...",o:["Deretan penjelas, pernyataan umum, interpretasi","Pernyataan umum, deretan penjelas, interpretasi","Pernyataan umum, interpretasi, deretan penjelas","Interpretasi, deretan penjelas, pernyataan umum"],a:1},
+  {q:"Pada bagian apakah inti dari teks eksplanasi?",o:["Pernyataan umum","Sebab akibat","Aspek yang dilaporkan","Argumen"],a:1},
+  {p:"Tawuran adalah suatu proses saling menyerang atau berkelahi yang dilakukan secara berkelompok dan terjadi antara satu kelompok dengan kelompok lain karena ada suatu permasalahan. Tawuran tidak mengenal usia. Pihak-pihak yang terlibat tawuran bisa remaja, dewasa, bahkan anak-anak di bawah umur.",q:"Apa informasi yang disampaikan dalam paragraf tersebut?",o:["Tawuran dapat dilakukan oleh remaja, dewasa, bahkan anak-anak","Tawuran sering terjadi di kota-kota besar di Indonesia","Tawuran disebabkan perilaku remaja yang tidak patuh aturan","Tawuran pelajar dapat diatasi dengan kerja sama sekolah dan orang tua"],a:0},
+  {q:"Inti teks eksplanasi terdapat pada bagian ...",o:["Pernyataan umum","Sebab akibat","Aspek yang dilaporkan","Argumen"],a:1},
+  {q:"Teks eksplanasi adalah ...",o:["Teks yang berisi tentang penjelasan","Teks yang berisi tentang cara mengerjakan sesuatu","Teks yang berisi tentang pendapat","Teks yang menceritakan suatu kejadian"],a:0},
+  {q:"Langkah pertama yang harus diperhatikan dalam menyusun teks eksplanasi adalah ...",o:["Menentukan topik","Menyusun kerangka karangan","Mengembangkan kerangka karangan","Menentukan tujuan penulisan"],a:0},
+  {p:"Kerangka: 1) Proses terjadinya efek rumah kaca. 2) Penyebab terjadinya efek rumah kaca. 3) Akibat efek rumah kaca. 4) Solusi efek rumah kaca. 5) Definisi efek rumah kaca.",q:"Jika dikembangkan menjadi teks eksplanasi, urutan tepat kerangka tersebut adalah ...",o:["5)-1)-2)-3)-4)","5)-1)-2)-4)-3)","5)-2)-1)-3)-4)","5)-2)-1)-4)-3)"],a:2},
+  {q:"Teks yang berisi penjelasan berupa proses terjadinya peristiwa alam, sosial atau budaya disebut ...",o:["Argumentasi","Eksplanasi","Prosedur","Cerita ulang"],a:1},
+  {p:"(1) Gempa yang terjadi dalam perut bumi akan mengakibatkan munculnya tekanan ke arah vertikal sehingga dasar lautan akan naik dan turun dalam rentang waktu yang singkat. (2) Hal ini kemudian akan memicu ketakseimbangan pada air lautan yang kemudian terdorong menjadi gelombang besar yang bergerak mencapai wilayah daratan.",q:"Teks eksplanasi di atas menjelaskan ...",o:["Penyebab gempa","Penyebab terjadinya tsunami","Akibat tsunami","Akibat gempa"],a:1},
+  {p:"(1) Gempa yang terjadi dalam perut bumi akan mengakibatkan munculnya tekanan ke arah vertikal sehingga dasar lautan akan naik dan turun dalam rentang waktu yang singkat. (2) Hal ini kemudian akan memicu ketakseimbangan pada air lautan yang kemudian terdorong menjadi gelombang besar.",q:"Maksud kata 'Hal ini' pada kalimat (2) adalah ...",o:["Naik dan turunnya dasar laut","Tekanan ke arah vertikal dalam perut bumi","Gempa","Tsunami"],a:0},
+  {q:"Di bawah ini yang termasuk struktur teks eksplanasi ialah ...",o:["Abstraksi","Tesis","Argumentasi","Pernyataan umum"],a:3},
+  {q:"Karakteristik atau ciri dari teks eksplanasi ialah ...",o:["Isinya memuat fakta","Muatannya didasarkan pada pendapat/opini","Adanya langkah prosedur","Memuat unsur kekonyolan"],a:0},
+  {q:"Teks eksplanasi ditulis untuk menjawab pertanyaan ...",o:["Apa dan siapa","Kapan dan di mana","Bagaimana dan mengapa","Berapa dan bagaimana"],a:2},
+  {q:"Berikut ini ciri-ciri teks eksplanasi, KECUALI ...",o:["Struktur terdiri atas pernyataan umum, deretan penjelas, dan penutup","Memuat informasi sesungguhnya/fakta","Memuat informasi yang bersifat keilmuan","Berisi langkah-langkah kerja"],a:3}
+];
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+let COLS,ROWS,CELL;
+let snake,dir,nextDir,apple,score,gameLoop,paused,usedQs,currentQ,gameState='start';
+let flowerDeco=[];
+let appleFloat=0;
+
+function sizeCanvas(){
+  const maxW=Math.min(window.innerWidth-16,420);
+  const maxH=window.innerHeight-190;
+  const s=Math.min(maxW,maxH);
+  CELL=Math.floor(s/18);
+  COLS=Math.floor(s/CELL);ROWS=COLS;
+  canvas.width=COLS*CELL;canvas.height=ROWS*CELL;
+  generateFlowers();
+}
+
+function generateFlowers(){
+  flowerDeco=[];
+  const count=Math.floor(COLS*ROWS*0.05);
+  for(let i=0;i<count;i++){
+    flowerDeco.push({
+      x:Math.floor(Math.random()*COLS),
+      y:Math.floor(Math.random()*ROWS),
+      type:Math.random()>0.5?'flower':'clover',
+      hue:Math.floor(Math.random()*360)
+    });
+  }
+}
+
+function initGame(){
+  sizeCanvas();
+  const mid=Math.floor(COLS/2);
+  snake=[{x:mid,y:mid},{x:mid-1,y:mid},{x:mid-2,y:mid}];
+  dir={x:1,y:0};nextDir={x:1,y:0};
+  score=0;paused=false;usedQs=[];
+  placeApple();updateUI();
+}
+
+function placeApple(){
+  let pos;
+  do{pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)};}
+  while(snake.some(s=>s.x===pos.x&&s.y===pos.y));
+  apple=pos;
+}
+
+function getQuestion(){
+  if(usedQs.length>=questions.length)usedQs=[];
+  let idx;
+  do{idx=Math.floor(Math.random()*questions.length);}while(usedQs.includes(idx));
+  usedQs.push(idx);
+  return questions[idx];
+}
+
+function updateUI(){
+  document.getElementById('scoreEl').textContent=score;
+  document.getElementById('lenEl').textContent=snake.length;
+}
+
+// ===== DRAW =====
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // Checkerboard grass
+  for(let x=0;x<COLS;x++){
+    for(let y=0;y<ROWS;y++){
+      const light=(x+y)%2===0;
+      ctx.fillStyle=light?'#a5d6a7':'#81c784';
+      ctx.fillRect(x*CELL,y*CELL,CELL,CELL);
+    }
+  }
+
+  // Grid lines subtle
+  ctx.strokeStyle='rgba(0,0,0,0.05)';
+  ctx.lineWidth=0.5;
+  for(let i=0;i<=COLS;i++){ctx.beginPath();ctx.moveTo(i*CELL,0);ctx.lineTo(i*CELL,canvas.height);ctx.stroke();}
+  for(let i=0;i<=ROWS;i++){ctx.beginPath();ctx.moveTo(0,i*CELL);ctx.lineTo(canvas.width,i*CELL);ctx.stroke();}
+
+  // Flower decorations
+  flowerDeco.forEach(f=>{
+    if(!snake.some(s=>s.x===f.x&&s.y===f.y)&&!(apple&&apple.x===f.x&&apple.y===f.y)){
+      drawFlowerDeco(f.x*CELL+CELL/2,f.y*CELL+CELL/2,f.type,f.hue);
+    }
+  });
+
+  // Apple with float
+  appleFloat=Math.sin(Date.now()/500)*3;
+  drawApple(apple.x*CELL+CELL/2,apple.y*CELL+CELL/2+appleFloat,CELL*0.4);
+
+  // Snake
+  for(let i=snake.length-1;i>=0;i--){
+    const s=snake[i];
+    if(i===0) drawHead(s.x*CELL,s.y*CELL);
+    else drawBody(s.x*CELL,s.y*CELL,i,snake.length);
+  }
+}
+
+function drawFlowerDeco(cx,cy,type,hue){
+  ctx.save();ctx.globalAlpha=0.7;
+  if(type==='flower'){
+    const petals=5;
+    ctx.fillStyle=`hsl(${hue},80%,70%)`;
+    for(let i=0;i<petals;i++){
+      const a=(i*Math.PI*2)/petals;
+      const px=cx+Math.cos(a)*CELL*0.18;
+      const py=cy+Math.sin(a)*CELL*0.18;
+      ctx.beginPath();ctx.arc(px,py,CELL*0.1,0,Math.PI*2);ctx.fill();
+    }
+    ctx.fillStyle='#ffd54f';
+    ctx.beginPath();ctx.arc(cx,cy,CELL*0.1,0,Math.PI*2);ctx.fill();
+  } else {
+    ctx.fillStyle='#66bb6a';
+    for(let i=0;i<3;i++){
+      const a=(i*Math.PI*2)/3-Math.PI/2;
+      ctx.beginPath();ctx.ellipse(cx+Math.cos(a)*CELL*0.14,cy+Math.sin(a)*CELL*0.14,CELL*0.1,CELL*0.07,a,0,Math.PI*2);ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
+function drawApple(cx,cy,r){
+  // Shadow
+  ctx.fillStyle='rgba(0,0,0,0.15)';
+  ctx.beginPath();ctx.ellipse(cx,cy+r+4,r*0.7,r*0.2,0,0,Math.PI*2);ctx.fill();
+
+  // Body
+  const g=ctx.createRadialGradient(cx-r*0.3,cy-r*0.3,r*0.05,cx,cy,r);
+  g.addColorStop(0,'#ff6b6b');g.addColorStop(0.6,'#e53935');g.addColorStop(1,'#b71c1c');
+  ctx.fillStyle=g;
+  ctx.beginPath();
+  ctx.moveTo(cx,cy-r);
+  ctx.bezierCurveTo(cx+r,cy-r,cx+r*1.1,cy+r*0.5,cx,cy+r);
+  ctx.bezierCurveTo(cx-r*1.1,cy+r*0.5,cx-r,cy-r,cx,cy-r);
+  ctx.fill();
+
+  // Top dip
+  ctx.fillStyle='#c62828';
+  ctx.beginPath();ctx.ellipse(cx,cy-r*0.75,r*0.22,r*0.28,0,0,Math.PI*2);ctx.fill();
+
+  // Stem
+  ctx.strokeStyle='#5d4037';ctx.lineWidth=r*0.18;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(cx,cy-r*0.85);ctx.quadraticCurveTo(cx+r*0.4,cy-r*1.3,cx+r*0.2,cy-r*1.4);ctx.stroke();
+
+  // Leaf
+  ctx.fillStyle='#4caf50';
+  ctx.beginPath();ctx.ellipse(cx+r*0.35,cy-r*1.1,r*0.28,r*0.14,0.4,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#2e7d32';ctx.lineWidth=0.8;
+  ctx.beginPath();ctx.moveTo(cx+r*0.1,cy-r*1.1);ctx.lineTo(cx+r*0.6,cy-r*1.08);ctx.stroke();
+
+  // Shine
+  const sh=ctx.createRadialGradient(cx-r*0.35,cy-r*0.35,0,cx-r*0.35,cy-r*0.35,r*0.45);
+  sh.addColorStop(0,'rgba(255,255,255,0.55)');sh.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=sh;
+  ctx.beginPath();ctx.ellipse(cx-r*0.32,cy-r*0.32,r*0.35,r*0.28,-0.4,0,Math.PI*2);ctx.fill();
+}
+
+function drawBody(cx,cy,i,total){
+  const t=1-(i/total)*0.45;
+  // Orange-gold snake — high contrast against green background
+  const r=Math.round(255),g2=Math.round(140-40*t),b=Math.round(0);
+  const grad=ctx.createLinearGradient(cx,cy,cx+CELL,cy+CELL);
+  grad.addColorStop(0,`rgba(255,${g2+50},30,1)`);
+  grad.addColorStop(1,`rgba(${r-30},${g2-20},0,1)`);
+  ctx.fillStyle=grad;
+  ctx.beginPath();
+  if(ctx.roundRect) ctx.roundRect(cx+2,cy+2,CELL-4,CELL-4,CELL*0.3);
+  else ctx.rect(cx+2,cy+2,CELL-4,CELL-4);
+  ctx.fill();
+
+  // Scale marks
+  ctx.strokeStyle='rgba(0,0,0,0.12)';ctx.lineWidth=0.7;
+  for(let sy=cy+7;sy<cy+CELL-2;sy+=6){
+    ctx.beginPath();ctx.arc(cx+CELL/2,sy,CELL*0.28,0.25,Math.PI-0.25);ctx.stroke();
+  }
+  // Border
+  ctx.strokeStyle='rgba(0,0,0,0.08)';ctx.lineWidth=1;
+  ctx.beginPath();
+  if(ctx.roundRect) ctx.roundRect(cx+2,cy+2,CELL-4,CELL-4,CELL*0.3);
+  else ctx.rect(cx+2,cy+2,CELL-4,CELL-4);
+  ctx.stroke();
+}
+
+function drawHead(cx,cy){
+  // Shadow
+  ctx.fillStyle='rgba(0,0,0,0.15)';
+  ctx.beginPath();if(ctx.roundRect)ctx.roundRect(cx+4,cy+4,CELL-4,CELL-4,CELL*0.35);
+  else ctx.rect(cx+4,cy+4,CELL-4,CELL-4);
+  ctx.fill();
+
+  // Head body
+  const hg=ctx.createLinearGradient(cx,cy,cx+CELL,cy+CELL);
+  hg.addColorStop(0,'#ff6d00');hg.addColorStop(1,'#e65100');
+  ctx.fillStyle=hg;
+  ctx.beginPath();if(ctx.roundRect)ctx.roundRect(cx+2,cy+2,CELL-4,CELL-4,CELL*0.38);
+  else ctx.rect(cx+2,cy+2,CELL-4,CELL-4);
+  ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1;
+  ctx.beginPath();if(ctx.roundRect)ctx.roundRect(cx+2,cy+2,CELL-4,CELL-4,CELL*0.38);
+  else ctx.rect(cx+2,cy+2,CELL-4,CELL-4);
+  ctx.stroke();
+
+  // Eyes
+  const ed=CELL*0.18;
+  let ex1,ey1,ex2,ey2;
+  if(dir.x===1){ex1=cx+CELL*0.68;ey1=cy+CELL*0.28;ex2=cx+CELL*0.68;ey2=cy+CELL*0.68;}
+  else if(dir.x===-1){ex1=cx+CELL*0.28;ey1=cy+CELL*0.28;ex2=cx+CELL*0.28;ey2=cy+CELL*0.68;}
+  else if(dir.y===-1){ex1=cx+CELL*0.28;ey1=cy+CELL*0.28;ex2=cx+CELL*0.68;ey2=cy+CELL*0.28;}
+  else{ex1=cx+CELL*0.28;ey1=cy+CELL*0.68;ex2=cx+CELL*0.68;ey2=cy+CELL*0.68;}
+
+  // White eye
+  ctx.fillStyle='#fff';
+  ctx.beginPath();ctx.arc(ex1,ey1,ed,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(ex2,ey2,ed,0,Math.PI*2);ctx.fill();
+  // Pupil
+  ctx.fillStyle='#111';
+  ctx.beginPath();ctx.arc(ex1,ey1,ed*0.55,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(ex2,ey2,ed*0.55,0,Math.PI*2);ctx.fill();
+  // Eye shine
+  ctx.fillStyle='rgba(255,255,255,0.7)';
+  ctx.beginPath();ctx.arc(ex1-ed*0.2,ey1-ed*0.2,ed*0.25,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(ex2-ed*0.2,ey2-ed*0.2,ed*0.25,0,Math.PI*2);ctx.fill();
+
+  // Tongue
+  const tp=Math.sin(Date.now()/280)*0.5+0.5;
+  const tLen=CELL*0.28*tp;
+  const ta=dir.x===1?0:dir.x===-1?Math.PI:dir.y===-1?-Math.PI/2:Math.PI/2;
+  const tx=cx+CELL/2+Math.cos(ta)*CELL*0.35;
+  const ty=cy+CELL/2+Math.sin(ta)*CELL*0.35;
+  ctx.strokeStyle='#ff4444';ctx.lineWidth=1.8;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(cx+CELL/2+Math.cos(ta)*CELL*0.1,cy+CELL/2+Math.sin(ta)*CELL*0.1);ctx.lineTo(tx,ty);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx+Math.cos(ta-0.45)*tLen,ty+Math.sin(ta-0.45)*tLen);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx+Math.cos(ta+0.45)*tLen,ty+Math.sin(ta+0.45)*tLen);ctx.stroke();
+}
+
+// ===== GAME LOOP =====
+let animFrame;
+function gameRender(){
+  if(gameState==='playing'&&!paused) draw();
+  else if(gameState==='playing') draw();
+  animFrame=requestAnimationFrame(gameRender);
+}
+
+function step(){
+  dir={...nextDir};
+  let head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+  if(head.x<0)head.x=COLS-1;
+  if(head.x>=COLS)head.x=0;
+  if(head.y<0)head.y=ROWS-1;
+  if(head.y>=ROWS)head.y=0;
+  if(snake.some(s=>s.x===head.x&&s.y===head.y)){gameOver();return;}
+  snake.unshift(head);
+  if(head.x===apple.x&&head.y===apple.y){
+    paused=true;clearInterval(gameLoop);
+    currentQ=getQuestion();currentQ.attempts=0;
+    showQuestion(currentQ);
+  } else {snake.pop();}
+  updateUI();
+}
+
+function startLoop(){clearInterval(gameLoop);gameLoop=setInterval(step,220);}
+
+function showQuestion(q){
+  document.getElementById('qText').textContent=q.q;
+  const pEl=document.getElementById('qPassage');
+  q.p?(pEl.textContent=q.p,pEl.style.display='block'):(pEl.style.display='none');
+  document.getElementById('qFeedback').textContent='';
+  document.getElementById('qFeedback').style.background='transparent';
+  const ob=document.getElementById('qOptions');ob.innerHTML='';
+  ['A','B','C','D'].forEach((l,i)=>{
+    const btn=document.createElement('button');
+    btn.className='option-btn';btn.textContent=`${l}. ${q.o[i]}`;
+    btn.onclick=()=>handleAnswer(i,q,btn);
+    ob.appendChild(btn);
+  });
+  document.getElementById('questionModal').classList.add('active');
+}
+
+function handleAnswer(i,q,btn){
+  q.attempts++;
+  const fb=document.getElementById('qFeedback');
+  const allBtns=document.querySelectorAll('.option-btn');
+  allBtns.forEach(b=>b.style.pointerEvents='none');
+  if(i===q.a){
+    btn.classList.add('correct');
+    let pts=q.attempts===1?10:q.attempts===2?9:q.attempts===3?7:5;
+    score+=pts;
+    fb.textContent=`✅ Benar! +${pts} poin 🎉`;
+    fb.style.background='#e8f5e9';fb.style.color='#2e7d32';
+    showConfetti();showSuccessPop();
+    setTimeout(()=>{
+      document.getElementById('questionModal').classList.remove('active');
+      placeApple();paused=false;updateUI();startLoop();
+    },1300);
+  } else {
+    btn.classList.add('wrong');
+    allBtns[q.a].classList.add('correct');
+    fb.textContent='❌ Salah! Jawaban yang benar sudah ditandai hijau.';
+    fb.style.background='#ffebee';fb.style.color='#c62828';
+    if(snake.length>1)snake.pop();
+    updateUI();
+    setTimeout(()=>{
+      document.getElementById('questionModal').classList.remove('active');
+      placeApple();paused=false;updateUI();startLoop();
+    },2200);
+  }
+}
+
+function showConfetti(){
+  const box=document.getElementById('confettiBox');
+  const colors=['#ff6b6b','#ffd54f','#66bb6a','#42a5f5','#ec407a','#ab47bc','#ff8f00'];
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');p.className='cp';
+    p.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*40}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-delay:${Math.random()*0.5}s;border-radius:${Math.random()>0.5?'50%':'3px'};width:${8+Math.random()*8}px;height:${8+Math.random()*8}px`;
+    box.appendChild(p);setTimeout(()=>p.remove(),1600);
+  }
+}
+
+function showSuccessPop(){
+  const el=document.createElement('div');el.className='success-pop';
+  el.textContent='🌟 Hebat!';
+  document.getElementById('app').appendChild(el);
+  setTimeout(()=>el.remove(),950);
+}
+
+function gameOver(){
+  clearInterval(gameLoop);cancelAnimationFrame(animFrame);
+  gameState='gameover';
+  document.getElementById('gameScreen').classList.remove('active');
+  document.getElementById('goScore').textContent=score;
+  document.getElementById('gameoverScreen').classList.add('active');
+}
+
+function setDir(x,y){if(paused)return;if(x===-dir.x&&y===-dir.y)return;nextDir={x,y};}
+
+document.addEventListener('keydown',e=>{
+  if(gameState!=='playing')return;
+  const map={'ArrowUp':[0,-1],'ArrowDown':[0,1],'ArrowLeft':[-1,0],'ArrowRight':[1,0]};
+  if(map[e.key]){e.preventDefault();setDir(...map[e.key]);}
+});
+
+document.getElementById('btnUp').onclick=()=>setDir(0,-1);
+document.getElementById('btnDown').onclick=()=>setDir(0,1);
+document.getElementById('btnLeft').onclick=()=>setDir(-1,0);
+document.getElementById('btnRight').onclick=()=>setDir(1,0);
+
+let ts=null;
+canvas.addEventListener('touchstart',e=>{ts={x:e.touches[0].clientX,y:e.touches[0].clientY};},{passive:true});
+canvas.addEventListener('touchend',e=>{
+  if(!ts)return;
+  const dx=e.changedTouches[0].clientX-ts.x,dy=e.changedTouches[0].clientY-ts.y;
+  Math.abs(dx)>Math.abs(dy)?setDir(dx>0?1:-1,0):setDir(0,dy>0?1:-1);
+  ts=null;
+},{passive:true});
+
+function startGame(){
+  document.getElementById('startScreen').classList.remove('active');
+  document.getElementById('guideScreen').classList.remove('active');
+  document.getElementById('gameScreen').classList.add('active');
+  gameState='playing';initGame();startLoop();
+  cancelAnimationFrame(animFrame);gameRender();
+}
+
+document.getElementById('btnStart').onclick=()=>{
+  document.getElementById('startScreen').classList.remove('active');
+  document.getElementById('guideScreen').classList.add('active');
+};
+
+document.getElementById('btnGuideStart').onclick=startGame;
+document.getElementById('btnRetry').onclick=()=>{
+  document.getElementById('gameoverScreen').classList.remove('active');
+  document.getElementById('gameScreen').classList.add('active');
+  gameState='playing';initGame();startLoop();
+  cancelAnimationFrame(animFrame);gameRender();
+};
+
+window.addEventListener('resize',()=>{if(gameState==='playing'){sizeCanvas();draw();}});
+</script>
+</body>
+</html>
